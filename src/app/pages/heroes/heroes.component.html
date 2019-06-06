@@ -1,46 +1,56 @@
 <h1>Listado de Heroes</h1>
 <hr>
 <div class="row">
-  <div class="col text-right">
-    <button [routerLink]="['/heroe/nuevo']" class="btn btn-primary">
+    <div class="col text-right">
+        <button [routerLink]="['/heroe/nuevo']" class="btn btn-primary">
       <i class="fa fa-plus" aria-hidden="true"></i>
       Agregar
     </button>
-  </div>
+    </div>
 </div>
 
-<table class="table mt-3 animated fadeIn faster">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Poder</th>
-      <th scope="col">Vivo</th>
-      <th scope="col">Opciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
-    </tr>    
-  </tbody>
+<table *ngIf="!cargando && heroes.length > 0" class="table mt-3 animated fadeIn faster">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Poder</th>
+            <th scope="col">Vivo</th>
+            <th scope="col">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let heroe of heroes; let i = index">
+            <th scope="row">{{ i+1 }}</th>
+            <td>{{ heroe.nombre }}</td>
+            <td>{{ heroe.poder }}</td>
+            <td>
+                <label *ngIf="heroe.vivo" class="badge badge-success">Vivo</label>
+                <label *ngIf="!heroe.vivo" class="badge badge-danger">Muerto</label>
+            </td>
+            <td>
+                <button class="btn btn-info mr-1" type="button" [routerLink]="['/heroe', heroe.id]">
+                  <i class="fa fa-pen" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-danger mr-1" type="button" (click)="eliminarHeroe(heroe, i)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+              </button>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
-<div class="alert alert-warning text-center" role="alert">
-  <h4 class="alert-heading">No hay registros</h4>
-  <p>
-    <i class="fa fa-exclamation fa-2x" aria-hidden="true"></i>
-  </p>
+<div *ngIf="!cargando && heroes.length === 0" class="alert alert-warning text-center animated fadeIn faster" role="alert">
+    <h4 class="alert-heading">No hay registros</h4>
+    <p>
+        <i class="fa fa-exclamation fa-2x" aria-hidden="true"></i>
+    </p>
 </div>
 
-<div class="alert alert-info text-center" role="alert">
-  <h4 class="alert-heading">Cargando</h4>
-  <p>
-    <i class="fas fa-sync-alt fa-spin fa-2x"></i>
-  </p>
-  <p class="mb-0">Espere por favor</p>
+<div *ngIf="cargando" class="alert alert-info text-center animated fadeIn faster" role="alert">
+    <h4 class="alert-heading">Cargando</h4>
+    <p>
+        <i class="fas fa-sync-alt fa-spin fa-2x"></i>
+    </p>
+    <p class="mb-0">Espere por favor</p>
 </div>
